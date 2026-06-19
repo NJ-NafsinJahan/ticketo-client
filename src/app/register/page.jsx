@@ -28,9 +28,9 @@ export default function RegisterPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  console.log(errors, "from register page");
+  console.log(errors, " error from register page");
   const onSubmit = (data) => {
-    console.log(data, "from Register page");
+    console.log(data, "data from Register page");
   };
   return (
     <div className="">
@@ -93,15 +93,24 @@ export default function RegisterPage() {
               className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:border-pink-500!"
             />
 
+            {/* Role */}
             <div className="flex flex-col gap-2 w-full">
-              {/* Role */}
               <Label
                 htmlFor="role"
                 className="text-sm font-semibold text-slate-300"
               >
                 Select Role
               </Label>
-              <Select
+              <select
+                id="role"
+                {...register("role", { required: "Role is required" })}
+                className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:border-pink-500! p-4"
+              >
+                <option value="attendee">Attendee</option>
+                <option value="organizer">Organizer</option>
+              </select>
+
+              {/* <Select
                 {...register("role", { required: "Role is required" })}
                 id="role"
                 aria-label="Select Role"
@@ -115,6 +124,7 @@ export default function RegisterPage() {
                 <SelectPopover className="bg-slate-950 border border-white/10 rounded-xl shadow-2xl p-1 min-w-50">
                   <ListBox className="outline-none">
                     <ListBoxItem
+                      value="attendee"
                       key="attendee"
                       id="attendee"
                       textValue="Attendee"
@@ -122,7 +132,9 @@ export default function RegisterPage() {
                     >
                       Attendee (Browse & Book Tickets)
                     </ListBoxItem>
+
                     <ListBoxItem
+                      value="organizer"
                       key="organizer"
                       id="organizer"
                       textValue="Organizer"
@@ -132,7 +144,7 @@ export default function RegisterPage() {
                     </ListBoxItem>
                   </ListBox>
                 </SelectPopover>
-              </Select>
+              </Select> */}
             </div>
 
             <Button
