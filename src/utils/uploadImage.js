@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 // for reUsable Image upload function form imgBB
 export const uploadImage = async (imageFile) => {
   const formData = new FormData();
