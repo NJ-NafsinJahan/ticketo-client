@@ -18,7 +18,7 @@ export default async function EventDetailsPage() {
       </Link>
 
       {/* Banner */}
-      <div className="relative h-[300px] md:h-[450px] w-full rounded-3xl overflow-hidden shadow-2xl border border-white/5">
+      <div className="relative h-75 md:h-113 w-full rounded-3xl overflow-hidden shadow-2xl border border-white/5">
         <Image
           src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4"
           alt="Hello World"

@@ -21,6 +21,10 @@ import {
 import { FaUser, FaEnvelope, FaLock, FaImage, FaGoogle } from "react-icons/fa";
 import Logo from "@/components/Logo";
 import { useForm } from "react-hook-form";
+import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
+import { uploadImage } from "../../utils/uploadImage";
+import { redirect } from "next/navigation";
 
 export default function RegisterPage() {
   const {
@@ -28,9 +32,37 @@ export default function RegisterPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  console.log(errors, " error from register page");
-  const onSubmit = (data) => {
+  //   console.log(errors, " error from register page");
+
+  // OnSubmit
+  const onSubmit = async (data) => {
     console.log(data, "data from Register page");
+    // *****
+    // Upload image to imgBB
+    const imageFile = data.image[0];
+    console.log(imageFile, "image file");
+
+    const imageUrl = await uploadImage(imageFile); //reUsable uploadImage function call
+    console.log(imageUrl, "Image Url");
+    // return;
+
+    //   signUpData / registerData
+    const { data: signUpData, error: signUpError } =
+      await authClient.signUp.email({
+        email: data.email,
+        name: data.name,
+        password: data.password,
+        image: imageUrl,
+        role: data.role,
+      });
+    console.log(signUpData, signUpError, " Signup data / signup error");
+
+    if (signUpError) {
+      toast.error("Registration not succeed...");
+    } else {
+      toast.success("Registration is Successful !");
+      redirect("/");
+    }
   };
   return (
     <div className="">
@@ -46,7 +78,9 @@ export default function RegisterPage() {
         </CardHeader>
         <CardBody className="gap-4">
           <Form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
+            {/* For Name */}
             <Label htmlFor="name">Full Name</Label>
+
             <Input
               {...register("name", { required: "Name is required" })}
               id="name"
@@ -55,6 +89,11 @@ export default function RegisterPage() {
               startContent={<FaUser className="text-slate-400 text-sm" />}
               className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:border-pink-500!"
             />
+            {errors.name && (
+              <p className="text-red-500">{errors.name.message}</p>
+            )}
+
+            {/* For Email */}
             <Label htmlFor="email">Email Address</Label>
             <Input
               {...register("email", { required: "Email is required" })}
@@ -65,17 +104,26 @@ export default function RegisterPage() {
               startContent={<FaEnvelope className="text-slate-400 text-sm" />}
               className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:border-pink-500!"
             />
+            {errors.email && (
+              <p className="text-red-500">{errors.email.message}</p>
+            )}
 
             {/* image */}
+
             <Label htmlFor="image">Profile Image URL</Label>
             <Input
               {...register("image", { required: "Image is required" })}
+              type="file"
+              accept="image/*"
               id="image"
               placeholder="https://example.com/avatar.jpg"
               labelPlacement="outside"
               startContent={<FaImage className="text-slate-400 text-sm" />}
               className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:border-pink-500!"
             />
+            {errors.image && (
+              <p className="text-red-500">{errors.image.message}</p>
+            )}
 
             {/* Password */}
             <Label htmlFor="password">Password</Label>
@@ -92,6 +140,9 @@ export default function RegisterPage() {
               startContent={<FaLock className="text-slate-400 text-sm" />}
               className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:border-pink-500!"
             />
+            {errors.password && (
+              <p className="text-red-500">{errors.password.message}</p>
+            )}
 
             {/* Role */}
             <div className="flex flex-col gap-2 w-full">
@@ -109,42 +160,9 @@ export default function RegisterPage() {
                 <option value="attendee">Attendee</option>
                 <option value="organizer">Organizer</option>
               </select>
-
-              {/* <Select
-                {...register("role", { required: "Role is required" })}
-                id="role"
-                aria-label="Select Role"
-                placeholder="Select Role"
-                className="w-full"
-              >
-                <SelectTrigger className="w-full flex items-center justify-between bg-slate-900/50 border border-white/10 rounded-xl px-3 h-11 text-white text-sm">
-                  <SelectValue />
-                  <SelectIndicator />
-                </SelectTrigger>
-                <SelectPopover className="bg-slate-950 border border-white/10 rounded-xl shadow-2xl p-1 min-w-50">
-                  <ListBox className="outline-none">
-                    <ListBoxItem
-                      value="attendee"
-                      key="attendee"
-                      id="attendee"
-                      textValue="Attendee"
-                      className="p-2 text-white hover:bg-pink-500/20 rounded-lg cursor-pointer"
-                    >
-                      Attendee (Browse & Book Tickets)
-                    </ListBoxItem>
-
-                    <ListBoxItem
-                      value="organizer"
-                      key="organizer"
-                      id="organizer"
-                      textValue="Organizer"
-                      className="p-2 text-white hover:bg-pink-500/20 rounded-lg cursor-pointer"
-                    >
-                      Organizer (Create & Host Events)
-                    </ListBoxItem>
-                  </ListBox>
-                </SelectPopover>
-              </Select> */}
+              {errors.role && (
+                <p className="text-red-500">{errors.role.message}</p>
+              )}
             </div>
 
             <Button
