@@ -8,15 +8,19 @@ import React from "react";
 import {
   FaBuilding,
   FaCalendarAlt,
+  FaHistory,
   FaHome,
   FaPlus,
   FaSignOutAlt,
+  FaTicketAlt,
+  FaUserCircle,
   FaUsers,
+  FaUserShield,
 } from "react-icons/fa";
 
 const DashboardSidebar = () => {
   const { data: session } = useSession();
-  const role = session?.user?.role;
+  // const role = session?.user?.role;
 
   const handleLogout = () => {};
 
@@ -53,6 +57,63 @@ const DashboardSidebar = () => {
       href: "/dashboard/attendees",
     },
   ];
+
+  // Attendee Menu
+  const attendeeMenu = [
+    {
+      key: "overview",
+      label: "Overview",
+      icon: FaUserCircle,
+      href: "/dashboard/attendee",
+    },
+    {
+      key: "tickets",
+      label: "My Tickets",
+      icon: FaTicketAlt,
+      href: "/dashboard/tickets",
+    },
+    {
+      key: "payments",
+      label: "Payments",
+      icon: FaHistory,
+      href: "/dashboard/payments",
+    },
+  ];
+
+  // Admin Menu
+  const adminMenu = [
+    {
+      key: "users",
+      label: "Users",
+      icon: FaUserShield,
+      href: "/dashboard/users",
+    },
+    {
+      key: "events",
+      label: "Approve Events",
+      icon: FaCalendarAlt,
+      href: "/dashboard/events",
+    },
+    {
+      key: "transactions",
+      label: "Transaction Logs",
+      icon: FaHistory,
+      href: "/dashboard/transactions",
+    },
+  ];
+
+  // const role = session?.user?.role;
+  const role = "admin";
+  // const role = "attendee";
+  // menu items
+  const menuItems =
+    role === "organizer"
+      ? organizerMenu
+      : role === "attendee"
+        ? attendeeMenu
+        : role === "admin"
+          ? adminMenu
+          : null;
 
   return (
     <aside className="hidden md:flex md:w-64 flex-col bg-slate-950/40 backdrop-blur-xl border-r border-white/5 h-screen sticky top-0">
@@ -102,8 +163,8 @@ const DashboardSidebar = () => {
           Navigation
         </p>
 
-        {/* Organizer's menu mapping */}
-        {organizerMenu.map(({ key, label, icon: Icon, href }) => {
+        {/* Menu mapping by Role */}
+        {menuItems.map(({ key, label, icon: Icon, href }) => {
           return (
             <Link
               key={key}
