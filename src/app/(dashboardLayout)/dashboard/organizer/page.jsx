@@ -66,7 +66,7 @@ const OrganizerOverviewPage = () => {
 
       {!isPremium && (
         <Card
-          className="border border-yellow-500/20 bg-gradient-to-r from-yellow-500/5 via-amber-600/5 to-transparent relative overflow-hidden"
+          className="border border-yellow-500/20 bg-linear-to-r from-yellow-500/5 via-amber-600/5 to-transparent relative overflow-hidden"
           radius="lg"
         >
           <div className="p-8 flex flex-col md:flex-row items-center justify-between gap-6 z-10">

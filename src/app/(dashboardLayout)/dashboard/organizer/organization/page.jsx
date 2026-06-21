@@ -1,7 +1,7 @@
 "use client";
 
 import DashboardHeading from "@/components/DashboardHeading";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Button,
@@ -15,41 +15,82 @@ import { FaImage } from "react-icons/fa";
 import { uploadImage } from "@/utils/uploadImage";
 import { useForm } from "react-hook-form";
 import { useSession } from "@/lib/auth-client";
-import { addOrganization } from "@/lib/api/organizations/action";
+import {
+  addOrganization,
+  updateOrganization,
+} from "@/lib/api/organizations/action";
 import toast from "react-hot-toast";
+import { myOrganization } from "@/lib/api/organizations/data";
 
 const OrganizationPage = () => {
   const { data: session } = useSession();
+  const [myOrg, setMyOrg] = useState(null);
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    const setOrgData = async () => {
+      if (session?.user?.email) {
+        const org = await myOrganization(session?.user?.email);
+        setMyOrg(org);
+
+        if (org) {
+          reset({
+            organizationName: org.organizationName,
+            website: org.website,
+            description: org.description,
+          });
+        }
+      }
+    };
+    setOrgData();
+  }, [session, reset]);
+  //   console.log(myOrg, "myOrg data");
 
   // OnSubmit
   const onOrganizationSubmit = async (data) => {
     console.log(data, "data from organization page");
 
     // Upload image to imgBB
-    const imageFile = data.logo[0];
-    console.log(imageFile, "image file");
+    try {
+      let imageUrl = myOrg?.logo || "";
 
-    const imageUrl = await uploadImage(imageFile); //reUsable uploadImage function call
-    console.log(imageUrl, "Image Url");
+      if (data.logo && data.logo[0]) {
+        const imageFile = data.logo[0];
+        imageUrl = await uploadImage(imageFile);
+      }
 
-    const orgData = {
-      organizationName: data?.organizationName,
-      logo: imageUrl,
-      website: data?.website,
-      description: data?.description,
-      organizerEmail: session?.user?.email,
-    };
-    console.log(orgData, "orgData");
+      const orgData = {
+        organizationName: data?.organizationName,
+        logo: imageUrl,
+        website: data?.website,
+        description: data?.description,
+        organizerEmail: session?.user?.email,
+      };
 
-    const resData = await addOrganization(orgData);
-    // console.log(resData, "resData");
-    if (resData.insertedId) {
-      toast.success("Organization Profile added successfully");
+      if (!myOrg) {
+        const resData = await addOrganization(orgData);
+        if (resData?.insertedId) {
+          toast.success("Organization Profile added successfully");
+
+          setMyOrg({ _id: resData.insertedId, ...orgData });
+        } else {
+          toast.error("This Organization email exists!");
+        }
+      } else {
+        const updatedRes = await updateOrganization(orgData, myOrg?._id);
+        if (updatedRes?.modifiedCount > 0) {
+          toast.success("Organization Profile Updated");
+          setMyOrg((prev) => ({ ...prev, ...orgData }));
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong!");
     }
   };
   return (
@@ -83,6 +124,7 @@ const OrganizationPage = () => {
             >
               {/* organization Name */}
               <Input
+                defaultValue={myOrg?.organizationName}
                 {...register("organizationName", {
                   required: "Organization Name is required",
                 })}
@@ -91,7 +133,7 @@ const OrganizationPage = () => {
                 labelPlacement="outside"
                 placeholder="TechEvents Corp"
                 required
-                className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:!border-pink-500"
+                className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:border-pink-500!"
               />
               {errors.organizationName && (
                 <p className="text-red-500">
@@ -120,6 +162,7 @@ const OrganizationPage = () => {
 
               {/* organization website */}
               <Input
+                defaultValue={myOrg?.website}
                 {...register("website", {
                   required: "Organization Website is required",
                 })}
@@ -128,7 +171,7 @@ const OrganizationPage = () => {
                 labelPlacement="outside"
                 placeholder="techevents.corp"
                 required
-                className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:!border-pink-500"
+                className="w-full bg-slate-900/50 border-white/10 hover:border-pink-500/50 focus-within:border-pink-500!"
               />
               {errors.website && (
                 <p className="text-red-500">{errors.website.message}</p>
@@ -136,6 +179,7 @@ const OrganizationPage = () => {
 
               {/* description */}
               <TextArea
+                defaultValue={myOrg?.description}
                 {...register("description", {
                   required: "Description is required",
                 })}
@@ -144,7 +188,7 @@ const OrganizationPage = () => {
                 labelPlacement="outside"
                 placeholder="Hosting global developer conferences and software hacking marathons."
                 required
-                className="w-full bg-slate-900/50 border border-white/10 rounded-xl focus:outline-none min-h-[100px] text-white text-sm"
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl focus:outline-none min-h-25 text-white text-sm"
               />
               {errors.description && (
                 <p className="text-red-500">{errors.description.message}</p>
