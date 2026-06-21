@@ -12,6 +12,7 @@ import {
   Form,
 } from "@heroui/react";
 import { FaEnvelope, FaLock, FaGoogle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 import Logo from "@/components/Logo";
 import React from "react";
@@ -20,6 +21,7 @@ import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -43,7 +45,7 @@ const LoginPage = () => {
       toast.error("LogIn is not succeed...");
     } else {
       toast.success("LogIn is Successful !");
-      // redirect("/");
+      router.push("/");
     }
   };
 
@@ -100,7 +102,7 @@ const LoginPage = () => {
               className="w-full bg-linear-to-r from-pink-500 to-indigo-600 text-white font-bold h-12 shadow-lg shadow-pink-500/10 hover:shadow-pink-500/20"
               radius="lg"
             >
-              Sign In
+              Log In
             </Button>
           </Form>
 
