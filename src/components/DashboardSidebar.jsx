@@ -164,7 +164,7 @@ const DashboardSidebar = () => {
         </p>
 
         {/* Menu mapping by Role */}
-        {menuItems.map(({ key, label, icon: Icon, href }) => {
+        {menuItems?.map(({ key, label, icon: Icon, href }) => {
           return (
             <Link
               key={key}

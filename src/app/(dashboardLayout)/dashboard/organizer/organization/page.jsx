@@ -143,7 +143,7 @@ const OrganizationPage = () => {
 
               {/* image */}
 
-              <Label htmlFor="image">Profile Image URL</Label>
+              <Label htmlFor="logo">Logo Image URL</Label>
               <Input
                 {...register("logo", {
                   required: "Logo is required",
