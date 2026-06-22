@@ -17,6 +17,8 @@ import DashboardHeading from "@/components/DashboardHeading";
 import { useSession } from "@/lib/auth-client";
 import { myEvents } from "@/lib/api/events/data";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import EditEventModal from "@/components/EditEventModal";
+// import DeleteEventModal from "@/components/DeleteEventModal";
 
 const manageEvent = () => {
   const { data: session } = useSession();
@@ -73,7 +75,7 @@ const manageEvent = () => {
               Event data loading....
             </div>
           ) : (
-            <Table aria-label="Manage Events Table" removeWrapper>
+            <Table aria-label="Manage Events Table">
               <TableContent>
                 {/* table Header */}
                 <TableHeader className="bg-slate-950/40 border-b border-white/5 rounded-t-xl">
@@ -204,6 +206,19 @@ const manageEvent = () => {
           )}
         </div>
       </Card>
+      {/* edit modal */}
+      <EditEventModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        editingEvent={editingEvent}
+      />
+
+      {/* delete modal */}
+      {/* <DeleteEventModal
+        isDeleteOpen={isDeleteOpen}
+        setIsDeleteOpen={setIsDeleteOpen}
+        id={deletedId}
+      /> */}
     </div>
   );
 };
