@@ -14,6 +14,14 @@ export const serverMutation = async (path, method, data) => {
   return res.json();
 };
 
+// for Delete mutation delete event
+export const deleteMutation = async (path) => {
+  const res = await fetch(`${baseURL}${path}`, {
+    method: "DELETE",
+  });
+  return res.json();
+};
+
 export const serverFetch = async (path) => {
   const res = await fetch(`${baseURL}${path}`);
   return res.json();

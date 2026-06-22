@@ -1,12 +1,15 @@
-import { deleteEvent } from "@/lib/api/events/actions";
+import { deleteEvent } from "@/lib/api/events/action";
 import { Button, Modal } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const DeleteEventModal = ({ isDeleteOpen, setIsDeleteOpen, id }) => {
   const router = useRouter();
+
   const handleDeleteEvent = async () => {
-    const res = await deleteEvent(id);
+    const res = await deleteEvent(id); //deleteEvent call
+    console.log(res, " response from delete modal");
+
     if (res?.deletedCount > 0) {
       router.refresh();
       toast.success("Event deleted successfully");

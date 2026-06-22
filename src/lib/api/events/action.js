@@ -1,6 +1,6 @@
 "use client";
 
-import { serverMutation } from "../server";
+import { deleteMutation, serverMutation } from "../server";
 
 // for add organization
 export const addEvent = async (data) => {
@@ -8,9 +8,16 @@ export const addEvent = async (data) => {
   return resData;
 };
 
-// for update organization data
+// for update event data
 export const updateEvent = async (data, id) => {
   console.log(data, id, "data and id from action.js");
   const resData = await serverMutation(`/api/events/${id}`, "PATCH", data);
+  return resData;
+};
+
+// for delete event
+export const deleteEvent = async (id) => {
+  console.log(id, " event id from action.js");
+  const resData = await deleteMutation(`/api/events/${id}`);
   return resData;
 };

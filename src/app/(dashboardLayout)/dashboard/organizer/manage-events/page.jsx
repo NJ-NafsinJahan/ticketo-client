@@ -11,13 +11,14 @@ import {
   TableCell,
   Chip,
   TableContent,
-  Button, // কিছু কিছু সংস্করণে TableContent প্রয়োজন হয়
+  Button,
 } from "@heroui/react";
 import DashboardHeading from "@/components/DashboardHeading";
 import { useSession } from "@/lib/auth-client";
 import { myEvents } from "@/lib/api/events/data";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import EditEventModal from "@/components/EditEventModal";
+import DeleteEventModal from "@/components/DeleteEventModal";
 // import DeleteEventModal from "@/components/DeleteEventModal";
 
 const manageEvent = () => {
@@ -25,7 +26,6 @@ const manageEvent = () => {
   const [events, setEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(false);
 
-  // 💡 কোড ক্র্যাশ হওয়া রুখতে মিসিং স্টেটগুলো ডিফাইন করা হলো
   const [editingEvent, setEditingEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletedId, setDeletedId] = useState(null);
@@ -42,7 +42,6 @@ const manageEvent = () => {
       try {
         const eventData = await myEvents(session.user.email);
 
-        // ব্যাকএন্ড থেকে অ্যারে আসলে সরাসরি বসবে, অবজেক্ট আসলে অ্যারেতে রূপান্তর হবে
         if (Array.isArray(eventData)) {
           setEvents(eventData);
         } else if (eventData && typeof eventData === "object") {
@@ -214,11 +213,11 @@ const manageEvent = () => {
       />
 
       {/* delete modal */}
-      {/* <DeleteEventModal
+      <DeleteEventModal
         isDeleteOpen={isDeleteOpen}
         setIsDeleteOpen={setIsDeleteOpen}
         id={deletedId}
-      /> */}
+      />
     </div>
   );
 };
