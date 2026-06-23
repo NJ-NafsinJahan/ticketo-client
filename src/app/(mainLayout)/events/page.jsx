@@ -6,27 +6,29 @@ import { fetchEvents } from "@/lib/api/events/data";
 
 // ?search=mern&category=music
 // export default async function BrowseEventsPage({ searchParams }) {
-export default async function BrowseEventsPage() {
-  // const sParams = await searchParams;
-  // console.log(sParams);
-  // const search = sParams.search || "";
-  // const category = sParams.category || "";
-  // const location = sParams.location || "";
-  // console.log(search, category, location);
-  // const params = new URLSearchParams();
-  // if (search) {
-  //     params.set("search", search);
-  // }
-  // if (category) {
-  //     params.set("category", category);
-  // }
-  // if (location) {
-  //     params.set("location", location);
-  // }
+export default async function BrowseEventsPage({ searchParams }) {
+  const sParams = await searchParams;
+  console.log(sParams);
+
+  const search = sParams.search || "";
+  const category = sParams.category || "";
+  const location = sParams.location || "";
+  console.log(search, category, location);
+
+  const params = new URLSearchParams();
+  if (search) {
+    params.set("search", search);
+  }
+  if (category) {
+    params.set("category", category);
+  }
+  if (location) {
+    params.set("location", location);
+  }
   // console.log(params.toString());
 
-  // const events = await fetchEvents(params);
-  const events = await fetchEvents();
+  const events = await fetchEvents(params);
+  // const events = await fetchEvents();
 
   return (
     <div className="min-h-screen py-16 px-6 max-w-7xl mx-auto w-full space-y-12">

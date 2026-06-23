@@ -88,6 +88,8 @@ const AddEventPage = () => {
       toast.success("Event added Successfully");
       // redirect("/events");
       redirect("/dashboard/organizer/manage-events");
+    } else {
+      toast.error("Your free limit in over");
     }
   };
 

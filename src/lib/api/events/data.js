@@ -7,8 +7,8 @@ export const myEvents = async (email) => {
 };
 
 // for browse events page
-export const fetchEvents = async () => {
-  const result = await serverFetch(`/api/events`);
+export const fetchEvents = async (query) => {
+  const result = await serverFetch(`/api/events?${query.toString()}`);
   // console.log(result, "browse events");
   return result;
 };

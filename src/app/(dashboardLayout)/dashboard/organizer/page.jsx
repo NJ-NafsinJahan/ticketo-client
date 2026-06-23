@@ -1,9 +1,12 @@
 import { FaCalendarAlt, FaCrown, FaDollarSign, FaUsers } from "react-icons/fa";
 import { Card, Button } from "@heroui/react";
 import DashboardHeading from "@/components/DashboardHeading";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { getUser } from "@/lib/api/session";
 // const { Card } = require("@heroui/react");
 
-const OrganizerOverviewPage = () => {
+const OrganizerOverviewPage = async () => {
   const stats = {
     totalEvents: 15,
     totalAttendees: 450,
@@ -11,7 +14,15 @@ const OrganizerOverviewPage = () => {
     totalSoldTickets: 780,
   };
 
-  const isPremium = false;
+  // const session = await auth.api.getSession({
+  //   headers: await headers(),
+  // });
+
+  const user = await getUser(); // import getUser for session & user data
+  console.log(user, "session for premium");
+
+  const isPremium = user?.isPremium;
+  // const isPremium = true;
 
   return (
     <div className="space-y-6 mt-6">
@@ -64,7 +75,7 @@ const OrganizerOverviewPage = () => {
         </Card>
       </div>
 
-      {!isPremium && (
+      {!isPremium ? (
         <Card
           className="border border-yellow-500/20 bg-linear-to-r from-yellow-500/5 via-amber-600/5 to-transparent relative overflow-hidden"
           radius="lg"
@@ -87,6 +98,25 @@ const OrganizerOverviewPage = () => {
             >
               Upgrade to Premium
             </Button>
+          </div>
+        </Card>
+      ) : (
+        <Card
+          className="border border-green-500/20 bg-linear-to-r from-green-500/5 via-amber-600/5 to-transparent relative overflow-hidden"
+          radius="lg"
+        >
+          <div className="p-8 flex flex-col md:flex-row items-center justify-between gap-6 z-10">
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <FaCrown className="text-green-400" /> Explore Unlimited Event
+                Creation
+              </h3>
+              <p className="text-slate-400 text-xs max-w-xl leading-relaxed">
+                Standard organizer accounts are limited to{" "}
+                <strong>3 events</strong>. Upgrade to our Premium Package for{" "}
+                <strong>$49.00</strong> to host unlimited events.
+              </p>
+            </div>
           </div>
         </Card>
       )}
