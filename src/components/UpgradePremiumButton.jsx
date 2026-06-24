@@ -8,6 +8,7 @@ const updateToPremium = async () => {
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({ type: "subscription" }),
   });
   const data = await res.json();
   console.log(data, "stripe premium");

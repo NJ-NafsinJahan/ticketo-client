@@ -86,13 +86,13 @@ export default async function EventDetailsPage({ params }) {
 
         {/* Right Column: Ticket Booking Widget */}
         <div className="space-y-6">
-          <BookingWidget />
-          {/* <BookingWidget
+          {/* <BookingWidget /> */}
+          <BookingWidget
             ticketPrice={event?.price}
             availableSeats={event?.capacity}
             eventId={event?._id}
             eventTitle={event?.title}
-          /> */}
+          />
         </div>
       </div>
     </div>

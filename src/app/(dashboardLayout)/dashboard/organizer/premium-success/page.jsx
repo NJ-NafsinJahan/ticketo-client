@@ -18,6 +18,7 @@ import {
 
 // import { stripe } from "../../lib/stripe";
 import { stripe } from "@/lib/stripe";
+import { baseURL } from "@/lib/api/baseUrl";
 
 export default async function PremiumSuccess({ searchParams }) {
   const { session_id } = await searchParams;
@@ -29,7 +30,18 @@ export default async function PremiumSuccess({ searchParams }) {
   const session = await stripe.checkout.sessions.retrieve(session_id, {
     expand: ["line_items", "payment_intent"],
   });
-  console.log(session, "session from premium success");
+  //   console.log(session, "session from premium success");
+  const res = await fetch(
+    `${baseURL}/api/users/upgrade-premium/${session?.customer_email}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  const data = await res.json();
+  console.log(data, "data from premium success");
 
   //   for loading
   const loading = false;
