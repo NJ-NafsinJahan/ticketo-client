@@ -26,7 +26,7 @@ const Hero = () => {
           className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight"
         >
           Discover Premium Events &{" "}
-          <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
             Book Tickets
           </span>{" "}
           Seamlessly
