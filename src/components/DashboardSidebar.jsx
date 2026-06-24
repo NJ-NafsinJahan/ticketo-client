@@ -70,13 +70,13 @@ const DashboardSidebar = () => {
       key: "tickets",
       label: "My Tickets",
       icon: FaTicketAlt,
-      href: "/dashboard/tickets",
+      href: "/dashboard/attendee/tickets",
     },
     {
       key: "payments",
       label: "Payments",
       icon: FaHistory,
-      href: "/dashboard/payments",
+      href: "/dashboard/attendee/payments",
     },
   ];
 

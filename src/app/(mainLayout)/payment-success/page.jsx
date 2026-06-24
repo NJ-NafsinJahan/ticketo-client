@@ -33,6 +33,7 @@ export default async function PaymentSuccess({ searchParams }) {
     body: JSON.stringify(paymentData),
   });
   const data = await res.json();
+  console.log(data);
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-[#080c16] px-6 py-12">

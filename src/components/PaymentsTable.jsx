@@ -1,3 +1,5 @@
+import { fetchMyPayments } from "@/lib/api/payments/data";
+import { getUser } from "@/lib/api/session";
 import {
   Card,
   Table,
@@ -10,24 +12,7 @@ import {
   Chip,
 } from "@heroui/react";
 
-const PaymentsTable = () => {
-  const payments = [
-    {
-      _id: "p1",
-      transactionId: "ch_mock_stripe_transaction_12345",
-      amount: 298.0,
-      paidAt: "2026-06-03T10:00:00Z",
-      paymentStatus: "paid",
-    },
-    {
-      _id: "p2",
-      transactionId: "ch_mock_stripe_transaction_67890",
-      amount: 45.0,
-      paidAt: "2026-05-15T14:30:00Z",
-      paymentStatus: "paid",
-    },
-  ];
-
+const PaymentsTable = ({ payments }) => {
   return (
     <Card className="border border-white/5 bg-slate-900/40 backdrop-blur-xl shadow-2xl p-6 rounded-2xl">
       <div className="p-0 overflow-x-auto">
@@ -66,10 +51,10 @@ const PaymentsTable = () => {
                     {p.transactionId}
                   </TableCell>
                   <TableCell className="py-4 px-6 align-middle font-bold text-green-400">
-                    ${p.amount?.toFixed(2)}
+                    ${Number(p.amount)?.toFixed(2)}
                   </TableCell>
                   <TableCell className="py-4 px-6 align-middle text-slate-300 font-medium">
-                    {new Date(p.paidAt).toLocaleDateString()}
+                    {new Date(p.paidAt)?.toLocaleDateString()}
                   </TableCell>
                   <TableCell className="py-4 px-6 align-middle">
                     <Chip
